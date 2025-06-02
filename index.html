@@ -53,8 +53,8 @@
 
         .puzzle-grid {
             display: grid;
-            grid-template-columns: repeat(4, 90px);
-            grid-template-rows: repeat(4, 90px);
+            grid-template-columns: repeat(3, 120px);
+            grid-template-rows: repeat(3, 120px);
             gap: 3px;
             margin: 0 auto;
             background: #333;
@@ -199,21 +199,6 @@
             line-height: 1.4;
         }
 
-        .image-note {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,0,0,0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            max-width: 350px;
-            direction: rtl;
-            font-weight: bold;
-            border: 2px solid #ffd700;
-        }
-
         .error-message {
             color: #ff6b6b;
             font-weight: bold;
@@ -223,13 +208,6 @@
     </style>
 </head>
 <body>
-    <div class="image-note">
-        🖼️ <strong>כאן תכניס את התמונה שלך:</strong><br>
-        שנה את השורה:<br>
-        <code>const IMAGE_NAME = 'susio.jpeg';</code><br>
-        החלף את 'susio.jpeg' בשם הקובץ שלך!
-    </div>
-
     <div class="container">
         <h1>🔐 אתגר חדר הבריחה</h1>
         <p class="subtitle">פתור את פאזל ההזזה כדי להמשיך בהרפתקה!</p>
@@ -277,10 +255,10 @@
 
     <script>
         // *** כאן תשנה את שם התמונה שלך! ***
-        const IMAGE_NAME = 'paint.jpeg';
+        const IMAGE_NAME = 'susio.jpeg';
         
-        // הגדרות פאזל
-        const GRID_SIZE = 4;
+        // הגדרות פאזל - שונה ל-3x3
+        const GRID_SIZE = 3;
         const TOTAL_PIECES = GRID_SIZE * GRID_SIZE;
         let currentState = [];
         let solvedState = []; // המצב הפתור האמיתי
@@ -314,7 +292,7 @@
                 [currentState[i], currentState[j]] = [currentState[j], currentState[i]];
             }
             
-            // וידוא שהמצב המעורבב שונה מהמצב הנכון (1,2,3...16)
+            // וידוא שהמצב המעורבב שונה מהמצב הנכון (1,2,3...9)
             let attempts = 0;
             while (isInCorrectOrder() && attempts < 10) {
                 for (let i = currentState.length - 1; i > 0; i--) {
@@ -326,7 +304,8 @@
         }
         
         function isInCorrectOrder() {
-            const correctOrder = [4, 3, 2, 1, 8, 7, 6, 5, 12, 11, 10, 9, 16, 15, 14, 13];
+            // המצב הנכון עבור פאזל 3x3 (התמונה הוצגה הפוך)
+            const correctOrder = [3, 2, 1, 6, 5, 4, 9, 8, 7];
             return currentState.every((piece, index) => piece === correctOrder[index]);
         }
         
@@ -338,11 +317,11 @@
                 const pieceElement = document.createElement('div');
                 pieceElement.className = 'puzzle-piece';
                 
-                // חישוב מיקום הרקע הנכון עבור החלק
+                // חישוב מיקום הרקע הנכון עבור החלק (פאזל 3x3)
                 const correctRow = Math.floor((piece - 1) / GRID_SIZE);
                 const correctCol = (piece - 1) % GRID_SIZE;
-                const bgX = -correctCol * 90;
-                const bgY = -correctRow * 90;
+                const bgX = -correctCol * 120;
+                const bgY = -correctRow * 120;
                 
                 pieceElement.style.backgroundImage = `url(${IMAGE_NAME})`;
                 pieceElement.style.backgroundPosition = `${bgX}px ${bgY}px`;
@@ -381,8 +360,8 @@
         }
         
         function checkWin() {
-            // המצב הפתור הנכון עבור התמונה הספציפית שלך
-            const correctOrder = [4, 3, 2, 1, 8, 7, 6, 5, 12, 11, 10, 9, 16, 15, 14, 13];
+            // המצב הפתור הנכון עבור פאזל 3x3
+            const correctOrder = [3, 2, 1, 6, 5, 4, 9, 8, 7];
             
             const isWon = currentState.every((piece, index) => {
                 return piece === correctOrder[index];
